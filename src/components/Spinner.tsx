@@ -1,5 +1,14 @@
 import * as React from 'react'
+import { ClipLoader, MoonLoader } from 'react-spinners'
 
 export function Spinner() {
-  return <div className="inline-block animate-spin px-3">⍥</div>
+  return <ClipLoader
+    color={'#333'}
+    loading={true}
+    cssOverride={{
+      borderColor: '#6723f0',
+    }}
+    size="15"
+    data-testid="loader"
+  />
 }

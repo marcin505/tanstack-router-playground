@@ -2,148 +2,26 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Outlet, RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
+import ClipLoader from "react-spinners/ClipLoader";
 import { router } from './router'
 import { Spinner } from './components/Spinner'
 import { useSessionStorage } from './utils'
 
 function App() {
-  // This stuff is just to tweak our sandbox setup in real-time
-  const [loaderDelay, setLoaderDelay] = useSessionStorage('loaderDelay', 500)
-  const [actionDelay, setActionDelay] = useSessionStorage('actionDelay', 500)
-  const [defaultPendingMs, setDefaultPendingMs] = useSessionStorage(
-    'defaultPendingMs',
-    2000,
-  )
-  const [defaultPendingMinMs, setDefaulPendingMinMs] = useSessionStorage(
-    'defaultPendingMinMs',
-    500,
-  )
-  const [defaultLoaderMaxAge, setDefaultLoaderMaxAge] = useSessionStorage(
-    'defaultLoaderMaxAge',
-    5000,
-  )
-  const [defaultPreloadMaxAge, setDefaultPreloadMaxAge] = useSessionStorage(
-    'defaultPreloadMaxAge',
-    2000,
-  )
 
   return (
     <>
       {/* More stuff to tweak our sandbox setup in real-time */}
-      <div className="text-xs fixed w-52 shadow rounded bottom-2 left-2 bg-white bg-opacity-75 p-2 border-b flex flex-col gap-1 flex-wrap items-left">
-        <div>Loader Delay: {loaderDelay}ms</div>
-        <div>
-          <input
-            type="range"
-            min="0"
-            max="5000"
-            step="100"
-            value={loaderDelay}
-            onChange={(e) => setLoaderDelay(e.target.valueAsNumber)}
-            className="w-full"
-          />
-        </div>
-        <div>
-          Default Pending Ms: {defaultPendingMs}ms{' '}
-          {defaultPendingMs > loaderDelay ? <>🔴</> : <>🟢</>}
-        </div>
-        <div>
-          <input
-            type="range"
-            min="0"
-            max="5000"
-            step="100"
-            value={defaultPendingMs}
-            onChange={(e) => setDefaultPendingMs(e.target.valueAsNumber)}
-            className="w-full"
-          />
-        </div>
-        <div className={`${!defaultPendingMs ? 'opacity-30' : ''}`}>
-          <div>Default Min Pending Ms: {defaultPendingMinMs}ms</div>
-          <div>
-            <input
-              type="range"
-              min="0"
-              max="5000"
-              step="100"
-              value={defaultPendingMinMs}
-              onChange={(e) => setDefaulPendingMinMs(e.target.valueAsNumber)}
-              className={`w-full`}
-            />
-          </div>
-        </div>
-        <div>Action Delay: {actionDelay}ms</div>
-        <div>
-          <input
-            type="range"
-            min="0"
-            max="5000"
-            step="100"
-            value={actionDelay}
-            onChange={(e) => setActionDelay(e.target.valueAsNumber)}
-            className="w-full"
-          />
-        </div>
-        <div>
-          Loader Max Age:{' '}
-          {defaultLoaderMaxAge ? `${defaultLoaderMaxAge}ms` : 'Off'}
-        </div>
-        <div>
-          <input
-            type="range"
-            min="0"
-            max="10000"
-            step="250"
-            value={defaultLoaderMaxAge}
-            onChange={(e) => setDefaultLoaderMaxAge(e.target.valueAsNumber)}
-            className={`w-full`}
-          />
-        </div>
-        <div>
-          Preload Max Age:{' '}
-          {defaultPreloadMaxAge ? `${defaultPreloadMaxAge}ms` : 'Off'}
-        </div>
-        <div>
-          <input
-            type="range"
-            min="0"
-            max="10000"
-            step="250"
-            value={defaultPreloadMaxAge}
-            onChange={(e) => setDefaultPreloadMaxAge(e.target.valueAsNumber)}
-            className={`w-full`}
-          />
-        </div>
-      </div>
+      <RouterProvider
+        router={router}
 
-      <AuthProvider>
-        <RouterProvider
-          router={router}
-          defaultPendingElement={
-            <div className={`p-2 text-2xl`}>
-              <Spinner />
-            </div>
-          }
-          defaultLoaderMaxAge={defaultLoaderMaxAge}
-          defaultPreloadMaxAge={defaultPreloadMaxAge}
-          defaultPendingMs={defaultPendingMs}
-          defaultPendingMinMs={defaultPendingMinMs}
-          // Normally, the options above aren't changing, but for this particular
-          // example, we need to key the router when they change
-          key={[
-            defaultPreloadMaxAge,
-            defaultPendingMs,
-            defaultPendingMinMs,
-          ].join('.')}
-        >
-          {/* Normally <Router /> acts as it's own outlet,
-            but if we pass it children, route matching is
+      >
+        {/* Normally <Router /> acts as it's own outlet,
+            but if we pass it children, route matching is 
             deferred until the first <Outlet /> is found. */}
-          <Root />
-        </RouterProvider>
-      </AuthProvider>
-      <TanStackRouterDevtools router={router} position="bottom-right" />
+        <Root />
+      </RouterProvider>
+      <TanStackRouterDevtools router={router} position="bottom-right" initialIsOpen={true} />
     </>
   )
 }
@@ -165,16 +43,16 @@ function Root() {
           <Spinner />
         </div>
       </div>
-      <div className={`flex-1 flex`}>
-        <div className={`divide-y w-56`}>
+      <div className={`flex flex-col`}>
+        <div className="flex">
           {(
             [
               ['.', 'Home'],
               ['/dashboard', 'Dashboard'],
               ['/expensive', 'Expensive'],
-              ['/authenticated', 'Authenticated'],
-              ['/layout-a', 'Layout A'],
-              ['/layout-b', 'Layout B'],
+              // ['/authenticated', 'Authenti\cated'],
+              // ['/layout-a', 'Layout A'],
+              // ['/layout-b', 'Layout B'],
             ] as const
           ).map(([to, label]) => {
             return (
@@ -205,47 +83,6 @@ function Root() {
       </div>
     </div>
   )
-}
-
-type AuthContext = {
-  login: (username: string) => void
-  logout: () => void
-} & AuthContextState
-
-type AuthContextState = {
-  status: 'loggedOut' | 'loggedIn'
-  username?: string
-}
-
-const AuthContext = React.createContext<AuthContext>(null!)
-
-export function AuthProvider(props: { children: React.ReactNode }) {
-  const [state, setState] = React.useState<AuthContextState>({
-    status: 'loggedOut',
-  })
-
-  const login = (username: string) => {
-    setState({ status: 'loggedIn', username })
-  }
-
-  const logout = () => {
-    setState({ status: 'loggedOut' })
-  }
-
-  const contextValue = React.useMemo(
-    () => ({
-      ...state,
-      login,
-      logout,
-    }),
-    [state],
-  )
-
-  return <AuthContext.Provider value={contextValue} children={props.children} />
-}
-
-export function useAuth() {
-  return React.useContext(AuthContext)
 }
 
 const rootElement = document.getElementById('app')!
