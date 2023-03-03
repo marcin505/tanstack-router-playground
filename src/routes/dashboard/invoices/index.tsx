@@ -55,15 +55,7 @@ function Invoices() {
             </div>
           )
         })}
-        {invoiceIndexRoute.action.submissions.map((action) => (
-          <div key={action.submittedAt}>
-            <a href="#" className="block py-2 px-3 text-blue-700">
-              <pre className="text-sm">
-                #<Spinner /> - {action.submission.title?.slice(0, 10)}
-              </pre>
-            </a>
-          </div>
-        ))}
+
       </div>
       <div className="flex-1 border-l border-gray-200">
         <Outlet />
