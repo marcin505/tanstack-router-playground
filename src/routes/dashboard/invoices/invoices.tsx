@@ -3,6 +3,7 @@ import { router } from '../../../router'
 import { Invoice, postInvoice } from '../../../mockTodos'
 import { InvoiceFields } from '../../../components/InvoiceFields'
 import { invoicesRoute } from '.'
+import { fetchArticles } from '../../../utils'
 
 export const invoicesIndexRoute = invoicesRoute.createRoute({
   path: '/',
@@ -38,7 +39,7 @@ function InvoicesHome() {
           <div>
             <button
               className="bg-blue-500 rounded p-2 uppercase text-white font-black disabled:opacity-50"
-              // disabled={action.current?.status === 'pending'}
+            // disabled={action.current?.status === 'pending'}
             >
               Create
             </button>

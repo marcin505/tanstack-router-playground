@@ -3,16 +3,17 @@ import * as React from 'react'
 
 import { router } from '../../router'
 import { fetchInvoices } from '../../mockTodos'
+import { fetchArticles } from '../../utils'
 
 export const dashboardRoute = createRouteConfig().createRoute({
   path: 'dashboard',
   element: <Dashboard />,
-  loader: async () => {
-    console.log('Fetching all invoices...')
-    return {
-      invoices: await fetchInvoices(),
-    }
-  },
+  // loader: async () => {
+  //   console.log('Fetching all invoices...')
+  //   return {
+  //     invoices: await fetchInvoices(),
+  //   }
+  // },
 })
 
 function Dashboard() {
@@ -28,7 +29,7 @@ function Dashboard() {
         {(
           [
             ['.', 'Summary'],
-            ['/dashboard/invoices', 'Invoices'],
+            ['/dashboard/articles', 'Articles'],
             ['/dashboard/users', 'Users'],
           ] as const
         ).map(([to, label, search]) => {

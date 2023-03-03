@@ -60,8 +60,8 @@ function Users() {
     return !sortBy
       ? users
       : [...users].sort((a, b) => {
-          return a[sortBy] > b[sortBy] ? 1 : -1
-        })
+        return a[sortBy] > b[sortBy] ? 1 : -1
+      })
   }, [users, sortBy])
 
   const filteredUsers = React.useMemo(() => {
@@ -92,7 +92,6 @@ function Users() {
           ...old,
           usersView: {
             ...old?.usersView,
-            filterBy: filterDraft || undefined,
           },
         }
       },
