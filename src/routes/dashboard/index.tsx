@@ -32,17 +32,17 @@ function Dashboard() {
             ['/dashboard/articles', 'Articles'],
             ['/dashboard/users', 'Users'],
           ] as const
-        ).map(([to, label, search]) => {
+        ).map(([to, label]) => {
           return (
             <route.Link
               key={to}
               to={to}
-              search={search}
+              search={search => search}
               activeOptions={{ exact: to === '.' }}
               activeProps={{ className: `font-bold` }}
               className="p-2"
             >
-              {label}
+              {label} {to}
             </route.Link>
           )
         })}

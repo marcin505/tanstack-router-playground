@@ -4,34 +4,76 @@ import * as React from 'react'
 import { Spinner } from '../../../components/Spinner';
 import { Article, fetchArticles } from '../../../utils';
 import { Outlet } from '@tanstack/react-router';
+import { queryClient } from '../../../main';
+import { useQuery } from '@tanstack/react-query';
+import type { UseQueryOptions, QueryObserverOptions } from '@tanstack/react-query';
+import _debounce from 'lodash/debounce';
+
+const getArticles = (title: string): Promise<Article[]> => fetchArticles(title).then(({ hits }) => {
+  const articles = hits.map(article => ({ ...article, id: article.objectID }))
+  return articles;
+});
+
+const queryOptions: Partial<UseQueryOptions> = { refetchOnMount: false };
 
 export const articlesRoute = dashboardRoute.createRoute({
   path: 'articles',
   element: <Articles />,
-  loader: async () => {
-    console.log('Fetching all articles...')
-    const articles = await fetchArticles('react')
-    return {
-      articles,
-    }
-  },
 })
 
 function Articles() {
   const {
-    loaderData: { articles },
     Link,
     MatchRoute,
     useRoute,
+    navigate,
+    search: { title }
   } = router.useMatch(articlesRoute.id);
 
-  // const articlesIndexRoute = useRoute('./');
-  // const articleDetailsRoute = useRoute('./:articleId');
+  const [titleQuery, setTitleQuery] = React.useState(title);
+
+  const articles: Article[] = useQuery(['articles', titleQuery], () => {
+    return titleQuery.length ? getArticles(titleQuery) : [];
+  }, queryOptions).data ?? [];
+
+  const onChangeHandler = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.value) {
+        setTitleQuery('');
+        navigate({ search: undefined })
+        return;
+      }
+      setTitleQuery(e.target.value)
+    },
+    [setTitleQuery],
+  )
+
+  const debounce = React.useCallback(() => {
+    _debounce(e => {
+      onChangeHandler(e)
+    }, 800)
+  }, [])
+
+  React.useEffect(() => {
+    navigate({
+      search: searchQuery => (titleQuery ? {
+        ...searchQuery, title: titleQuery
+      } : undefined
+      )
+    })
+  }, [titleQuery]);
+
   return (
-    <div className="flex-1 flex">
+    <div className="flex-1 flex-col">
+      <input
+        value={titleQuery}
+        onChange={onChangeHandler}
+        placeholder="Search title..."
+        className="min-w-0 flex-1 border p-1 px-2 rounded"
+      />
       <div className="divide-y">
-        {!!(articles as Article[]).length &&
-          (articles as Article[])?.map(article => {
+        {
+          (articles as Article[]).map(article => {
             return (
               <div key={article.id}>
                 <Link
