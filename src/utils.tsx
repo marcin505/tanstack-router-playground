@@ -45,7 +45,6 @@ export function useSessionStorage<T>(key: string, initialValue: T) {
 
 export const baseURL = 'https://hn.algolia.com/api/v1/search';
 
-
 export interface Article {
   id: string;
   title: string;
@@ -53,10 +52,16 @@ export interface Article {
   url: string;
 }
 
-export const fetchArticles = (query: string): Promise<Article[] | { id: string; objectID: string; }[]> => {
-  return fetch(`${baseURL}?query=${query}`)
-    .then(response => response.json()).then((art: { hits: { objectID: string }[] }) => {
-      const articles = art.hits.map(article => ({ ...article, id: article.objectID }))
-      return articles;
-    })
+export interface FetchedArticles {
+  hits: {
+    objectID: string;
+    title: string;
+    points: number;
+    url: string
+  }[];
+}
+
+export const fetchArticles = (query: string, count: number = 5): Promise<FetchedArticles> => {
+  return fetch(`${baseURL}?query=${query}&hitsPerPage=${count}`)
+    .then(response => response.json());
 };

@@ -5,12 +5,11 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import ClipLoader from "react-spinners/ClipLoader";
 import { router } from './router'
 import { Spinner } from './components/Spinner'
-import { useSessionStorage } from './utils'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function App() {
 
