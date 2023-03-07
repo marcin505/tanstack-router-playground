@@ -16,8 +16,6 @@ const routeConfig = createRouteConfig().addChildren([
   indexRoute,
   dashboardRoute.addChildren([
     dashboardIndexRoute,
-    // articlesRoute,
-    // articlesRoute.addChildren([invoicesIndexRoute, invoiceRoute]),
     articlesRoute,
     invoicesRoute.addChildren([invoicesIndexRoute, invoiceRoute]),
     usersRoute,
