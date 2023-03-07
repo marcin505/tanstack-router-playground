@@ -1,24 +1,22 @@
-import { dashboardRoute } from '..'
-import { router } from '../../../router'
 import * as React from 'react'
+import { router } from '../../../router'
+import { dashboardRoute } from '..'
 import { Spinner } from '../../../components/Spinner';
 import { Article, fetchArticles, getArticles, OptionType } from '../../../utils';
 import { Outlet } from '@tanstack/react-router';
-import { queryClient } from '../../../main';
 import { useQuery } from '@tanstack/react-query';
-import type { UseQueryOptions, QueryObserverOptions } from '@tanstack/react-query';
-import _onTitleChange from 'lodash/debounce';
+import _debounce from 'lodash/debounce';
 import { z } from 'zod'
-import Select from 'react-select';
 
-const articleSearchSchema = z.object({
+const articlesSearchSchema = z.object({
   title: z.string().optional(),
+  articleId: z.string().optional(),
 })
 
 export const articlesRoute = dashboardRoute.createRoute({
   path: 'articles',
   element: <Articles />,
-  validateSearch: (search) => articleSearchSchema.parse(search)
+  validateSearch: (search) => articlesSearchSchema.parse(search)
 })
 
 function Articles() {
@@ -64,7 +62,7 @@ function Articles() {
             return (
               <div key={article.id}>
                 <Link
-                  to=""
+                  to="/dashboard/articles/:articleId"
                   params={{
                     articleId: `${article.id}`,
                   }}
@@ -75,15 +73,14 @@ function Articles() {
                   <pre className="text-sm">
                     #{article.id} - {article.title}
                     <MatchRoute
-                      to="./:id"
+                      to="/dashboard/articles/:articleId"
                       params={{
-                        id: article.id,
+                        articleId: article.id,
                       }}
                       pending
                     >
                       <Spinner />
                     </MatchRoute>
-                    }
                   </pre>
                 </Link>
               </div>

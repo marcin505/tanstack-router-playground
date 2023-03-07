@@ -11,12 +11,13 @@ import { invoiceRoute } from './routes/dashboard/invoices/invoice'
 import { usersIndexRoute } from './routes/dashboard/users/users'
 import { userRoute } from './routes/dashboard/users/user'
 import { articlesRoute } from './routes/dashboard/articles'
+import { articleRoute } from './routes/dashboard/articles/article'
 
 const routeConfig = createRouteConfig().addChildren([
   indexRoute,
   dashboardRoute.addChildren([
     dashboardIndexRoute,
-    articlesRoute,
+    articlesRoute.addChildren([articleRoute]),
     invoicesRoute.addChildren([invoicesIndexRoute, invoiceRoute]),
     usersRoute,
   ]),
