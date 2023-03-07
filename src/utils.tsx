@@ -39,9 +39,14 @@ export function useSessionStorage<T>(key: string, initialValue: T) {
     sessionStorage.setItem(key, JSON.stringify(state[0]))
   }, [state[0]])
 
-  return state
+  return state;
 }
 
+export const countDropdownOptions = [
+  { value: 5, label: 5 },
+  { value: 7, label: 7 },
+  { value: 9, label: 9 },
+];
 
 export const baseURL = 'https://hn.algolia.com/api/v1/search';
 
@@ -65,3 +70,5 @@ export const fetchArticles = (query: string, count: number = 5): Promise<Fetched
   return fetch(`${baseURL}?query=${query}&hitsPerPage=${count}`)
     .then(response => response.json());
 };
+
+

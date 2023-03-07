@@ -8,6 +8,7 @@ import { queryClient } from '../../../main';
 import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions, QueryObserverOptions } from '@tanstack/react-query';
 import _debounce from 'lodash/debounce';
+import { z } from 'zod'
 
 const getArticles = (title: string): Promise<Article[]> => fetchArticles(title).then(({ hits }) => {
   const articles = hits.map(article => ({ ...article, id: article.objectID }))
@@ -16,9 +17,15 @@ const getArticles = (title: string): Promise<Article[]> => fetchArticles(title).
 
 const queryOptions: Partial<UseQueryOptions> = { refetchOnMount: false };
 
+const articleSearchSchema = z.object({
+  title: z.string().optional(),
+  count: z.number().optional(),
+})
+
 export const articlesRoute = dashboardRoute.createRoute({
   path: 'articles',
   element: <Articles />,
+  validateSearch: (search) => articleSearchSchema.parse(search)
 })
 
 function Articles() {
@@ -27,13 +34,14 @@ function Articles() {
     MatchRoute,
     useRoute,
     navigate,
-    search: { title }
+    search: { title, count }
   } = router.useMatch(articlesRoute.id);
 
   const [titleQuery, setTitleQuery] = React.useState(title);
+  const [countQuery, setCountQuery] = React.useState(count);
 
-  const articles: Article[] = useQuery(['articles', titleQuery], () => {
-    return titleQuery.length ? getArticles(titleQuery) : [];
+  const articles: Article[] | unknown = useQuery(['articles', titleQuery], () => {
+    return titleQuery?.length ? getArticles(titleQuery) : [];
   }, queryOptions).data ?? [];
 
   const onChangeHandler = React.useCallback(
@@ -56,21 +64,26 @@ function Articles() {
 
   React.useEffect(() => {
     navigate({
-      search: searchQuery => (titleQuery ? {
-        ...searchQuery, title: titleQuery
-      } : undefined
-      )
+      search: old => {
+        return {
+          ...old,
+          ...(titleQuery && { title: titleQuery }),
+          ...(countQuery && { count: countQuery })
+        }
+      }
     })
-  }, [titleQuery]);
+  }, [titleQuery, countQuery]);
 
   return (
     <div className="flex-1 flex-col">
-      <input
-        value={titleQuery}
-        onChange={onChangeHandler}
-        placeholder="Search title..."
-        className="min-w-0 flex-1 border p-1 px-2 rounded"
-      />
+      <div className="flex-1">
+        <input
+          value={titleQuery}
+          onChange={onChangeHandler}
+          placeholder="Search title..."
+          className="min-w-0 flex-1 border p-1 px-2 rounded"
+        />
+      </div>
       <div className="divide-y">
         {
           (articles as Article[]).map(article => {
@@ -87,7 +100,6 @@ function Articles() {
                 >
                   <pre className="text-sm">
                     #{article.id} - {article.title}
-
                     <MatchRoute
                       to="./:id"
                       params={{
@@ -97,6 +109,7 @@ function Articles() {
                     >
                       <Spinner />
                     </MatchRoute>
+                    }
                   </pre>
                 </Link>
               </div>

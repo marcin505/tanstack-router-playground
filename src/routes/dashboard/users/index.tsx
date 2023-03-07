@@ -33,6 +33,9 @@ export const usersRoute = dashboardRoute.createRoute({
     // while navigating within or to this route (or it's children!)
     (search) => ({
       ...search,
+      usersView: {
+        ...search.usersView,
+      },
     }),
   ],
 })
@@ -74,6 +77,9 @@ function Users() {
       search: (old) => {
         return {
           ...old,
+          usersView: {
+            sortBy,
+          },
         }
       },
       replace: true,
@@ -84,6 +90,9 @@ function Users() {
       search: (old) => {
         return {
           ...old,
+          usersView: {
+            ...old?.usersView,
+          },
         }
       },
       replace: true,
