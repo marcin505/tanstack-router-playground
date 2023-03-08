@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Movie } from './types'
 
 export async function loaderDelayFn<T>(fn: (...args: any[]) => Promise<T> | T) {
   const delay = Number(sessionStorage.getItem('loaderDelay') ?? 0)
@@ -47,7 +48,6 @@ export interface OptionType {
   label: string;
 }
 
-export const baseURL = 'https://hn.algolia.com/api/v1/search';
 
 export interface Article {
   id: string;
@@ -65,14 +65,52 @@ export interface FetchedArticles {
   }[];
 }
 
-export const fetchArticles = (query: string, count: number = 5): Promise<FetchedArticles> => {
-  return fetch(`${baseURL}?query=${query}&hitsPerPage=${count}`)
-    .then(response => response.json());
+const baseURL = 'https://moviesdatabase.p.rapidapi.com/titles';
+const options = {
+  method: 'GET',
+  headers: {
+    'X-RapidAPI-Key': '18f3d531ddmsh23b545b8f03153dp1db305jsn5903b0518f86',
+    'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
+  }
+}
+
+type ShittyType = string | number[];
+
+const getSearchParams = ({ startYear, endYear }: { startYear?: number; endYear?: number }) => {
+  console.log({ startYear, endYear })
+  return ([['startYear', startYear], ['endYear', endYear]] as ShittyType[]).reduce((cur, acc) => {
+    if (!acc && cur[1]) return `?${cur[0]}=${cur[1]}`;
+    if (acc && cur[1]) return `${acc}&${cur[0]}=${cur[1]}`;
+    return acc;
+  }, '');
 };
 
-export const getArticles = (title: string): Promise<Article[]> => fetchArticles(title).then(({ hits }) => {
-  const articles = hits.map(article => ({ ...article, id: article.objectID }))
-  return articles;
-});
+export const fetchMovies = ({ keyword, startYear, endYear, signal }: {
+  keyword: string;
+  startYear?: number;
+  endYear?: number;
+  signal?: AbortSignal;
+}): Promise<{ results: Movie[] }> => {
+  return fetch(`${baseURL}/search/keyword/${keyword}`, { ...options, signal })
+    .then(response => response.json())
+};
+
+export const fetchMovie = ({ id }: { id: string }): Promise<{ results: Movie }> => {
+  return fetch(`${baseURL}/${id}`, options)
+    .then(response => response.json())
+};
 
 
+enum ParamNames {
+  TTITLE = 'title',
+  START_YEAR = 'startYear',
+  END_YEAR = 'endYear',
+}
+
+type Dupa = Record<ParamNames, string | number>;
+
+export const getParams = (params: Dupa): Dupa => {
+  return Object.entries(params).reduce(([key, value], acc) => {
+    return { ...acc, ...(value && { [key]: value }) }
+  }, {});
+}
