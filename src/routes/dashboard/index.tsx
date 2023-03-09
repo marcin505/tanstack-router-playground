@@ -1,19 +1,11 @@
 import { createRouteConfig, Outlet } from '@tanstack/react-router'
 import * as React from 'react'
 
-import { router } from '../../router'
-import { fetchInvoices } from '../../mockTodos'
-import { fetchArticles } from '../../utils'
+import { router } from '../../router';
 
 export const dashboardRoute = createRouteConfig().createRoute({
   path: 'dashboard',
   element: <Dashboard />,
-  // loader: async () => {
-  //   console.log('Fetching all invoices...')
-  //   return {
-  //     invoices: await fetchInvoices(),
-  //   }
-  // },
 })
 
 function Dashboard() {
@@ -29,7 +21,7 @@ function Dashboard() {
         {(
           [
             ['.', 'Summary'],
-            ['/dashboard/articles', 'Articles'],
+            ['/dashboard/movies', 'Movies'],
             ['/dashboard/users', 'Users'],
           ] as const
         ).map(([to, label]) => {
@@ -42,7 +34,7 @@ function Dashboard() {
               activeProps={{ className: `font-bold` }}
               className="p-2"
             >
-              {label} {to}
+              {label}
             </route.Link>
           )
         })}
