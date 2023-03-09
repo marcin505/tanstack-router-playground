@@ -10,8 +10,8 @@ import { invoicesIndexRoute } from './routes/dashboard/invoices/invoices'
 import { invoiceRoute } from './routes/dashboard/invoices/invoice'
 import { usersIndexRoute } from './routes/dashboard/users/users'
 import { userRoute } from './routes/dashboard/users/user'
-import { articlesRoute } from './routes/dashboard/articles'
-import { movieRoute } from './routes/dashboard/articles/movie'
+import { moviesRoute } from './routes/dashboard/movies/movies'
+import { movieRoute } from './routes/dashboard/movies/movie'
 
 const routeConfig = createRouteConfig().addChildren([
   indexRoute,
@@ -19,7 +19,7 @@ const routeConfig = createRouteConfig().addChildren([
     dashboardIndexRoute,
     // movieRoute,
     // articlesRoute,
-    articlesRoute.addChildren([movieRoute]),
+    moviesRoute.addChildren([movieRoute]),
     invoicesRoute.addChildren([invoicesIndexRoute, invoiceRoute]),
     usersRoute,
   ]),
