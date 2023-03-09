@@ -6,6 +6,8 @@ import { z } from 'zod';
 import { fetchMovie } from '../../../api';
 import { dashboardRoute } from '..';
 
+const width = 55;
+
 export const movieRoute = moviesRoute.createRoute({
   path: ':movieId',
   // parseParams: (params) => ({
@@ -29,9 +31,21 @@ export const movieRoute = moviesRoute.createRoute({
 
 function MovieView() {
   const {
-    loaderData: { movie }, search: { movieId }
+    loaderData: { movie }
   } = router.useMatch(movieRoute.id);
-  console.log({ movieId, movie });
 
-  return <div className="flex-1 border p-1"> dupa {movieId}</div>;
+  return (
+    <div className="flex-1 flex-col" style={{ paddingTop: 62 }}>
+      <span className='text-lg' style={{ marginBottom: 30 }}>Movie Descrption</span>
+      <div className="flex">
+        <span style={{ minWidth: width, fontWeight: 'bold' }}>title:</span>
+        <span>{movie.titleText.text}</span>
+      </div>
+      {movie?.releaseYear?.year && <div className="flex">
+        <span style={{ minWidth: width, fontWeight: 'bold' }}>year:</span>
+        <span>{movie.releaseYear.year}</span>
+      </div>
+      }
+    </div >
+  )
 }
