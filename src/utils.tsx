@@ -47,13 +47,5 @@ export function useSessionStorage<T>(key: string, initialValue: T) {
 export const countOptions: { value: number; label: string }[] = [
   { value: 3, label: `3` },
   { value: 6, label: `6` },
-  { value: 20, label: `20` },
+  { value: 20, label: `40` },
 ];
-
-enum ParamNames {
-  TTITLE = 'title',
-  START_YEAR = 'startYear',
-  END_YEAR = 'endYear',
-}
-
-type Dupa = Record<ParamNames, string | number>;

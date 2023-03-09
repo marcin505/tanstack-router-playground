@@ -19,9 +19,8 @@ function App() {
         <RouterProvider
           router={router}>
           <Root />
-          <TanStackRouterDevtools router={router} position="bottom-right" initialIsOpen={true}
-          />
-          <ReactQueryDevtools
+          <TanStackRouterDevtools router={router} position="bottom-right" initialIsOpen={true} />
+          {/* <ReactQueryDevtools
             initialIsOpen
             position="bottom-left"
             toggleButtonProps={{
@@ -33,7 +32,7 @@ function App() {
                 top: 0,
               },
             }}
-          />
+          /> */}
         </RouterProvider>
       </QueryClientProvider>
     </>
