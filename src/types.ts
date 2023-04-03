@@ -1,48 +1,42 @@
-export interface Movie {
-  id: string;
-  primaryImage?: PrimaryImage;
-  titleType: TitleType;
-  titleText: TitleText;
-  releaseYear: ReleaseYear;
-  releaseDate?: ReleaseDate;
-}
+import { z } from 'zod';
 
-export interface PrimaryImage {
-  id: string;
-  width: number;
-  height: number;
-  url: string;
-  caption: Caption;
-  __typename: string;
-}
+export const MovieObject = z.object({
+  id: z.string(),
+  primaryImage: z
+    .object({
+      id: z.string(),
+      width: z.number(),
+      height: z.number(),
+      url: z.string(),
+      caption: z.object({ plainText: z.string(), __typename: z.string() }),
+      __typename: z.string(),
+    })
+    .nullable(),
+  titleType: z
+    .object({
+      text: z.string(),
+      id: z.string(),
+      isSeries: z.boolean(),
+      isEpisode: z.boolean(),
+      __typename: z.string(),
+    })
+    .nullable(),
+  titleText: z.object({ text: z.string(), __typename: z.string() }),
+  releaseYear: z
+    .object({
+      year: z.number(),
+      endYear: z.null(),
+      __typename: z.string(),
+    })
+    .nullable(),
+  releaseDate: z
+    .object({
+      day: z.number().nullable(),
+      month: z.number().nullable(),
+      year: z.number().nullable(),
+      __typename: z.string(),
+    })
+    .nullable(),
+});
 
-export interface Caption {
-  plainText: string;
-  __typename: string;
-}
-
-export interface TitleType {
-  text: string;
-  id: string;
-  isSeries: boolean;
-  isEpisode: boolean;
-  __typename: string;
-}
-
-export interface TitleText {
-  text: string;
-  __typename: string;
-}
-
-export interface ReleaseYear {
-  year: number;
-  endYear: any;
-  __typename: string;
-}
-
-export interface ReleaseDate {
-  day?: number;
-  month?: number;
-  year: number;
-  __typename: string;
-}
+export type Movie = z.infer<typeof MovieObject>;

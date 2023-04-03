@@ -5,11 +5,11 @@ import { Spinner } from '../../../components/Spinner';
 import { countOptions } from '../../../utils';
 import { fetchMovies } from '../../../api';
 import { Outlet, SearchSchemaValidator, SearchSchemaValidatorObj } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
 import _debounce from 'lodash/debounce';
 import { z } from 'zod'
 import { Movie } from '../../../types';
 import { PacmanLoader } from 'react-spinners';
+import { MovieRecord } from './styles';
 
 const moviesSearchSchema = z.object({
   keyword: z.string().optional(),
@@ -57,6 +57,7 @@ function Movies() {
       fetchMovies({ keyword: keyword ?? '', limit: limit ?? 9, signal })
         .then(({ results }) => {
           setMovies(results)
+          console.log(results);
           setLoading(false);
         })
     },
@@ -118,16 +119,14 @@ function Movies() {
         }
         {!!movies?.length && !loading &&
           <>
-            <div className="flex" style={{ background: 'white', height: 30 }}>
+            <div className="flex" style={{ height: 30 }}>
               <span className="w-24">#id</span>
-              <span className="pl-3">
-                keyword
-          </span>
+              <span className="pl-3">keyword</span>
             </div>
             <div className="divide-y" style={{ maxHeight: 'calc(100vh - 310px)', minHeight: 200, overflowY: 'auto' }}>
               {(movies as Movie[]).map(movie => {
                 return (
-                  <div key={movie.id} className="block py-2 ">
+                  <MovieRecord key={movie.id}>
                     <pre className="text-sm flex">
                       <Link
                         to="/dashboard/movies/:movieId"
@@ -135,7 +134,7 @@ function Movies() {
                           movieId: `${movie.id}`,
                         }}
                         search={{ keyword, limit }}
-                        // preload="intent"
+                        preload="intent"
                         className="flex text-blue-700"
                         activeProps={{ className: `font-bold` }}
                       >
@@ -154,7 +153,7 @@ function Movies() {
                         </MatchRoute>
                       </Link>
                     </pre>
-                  </div>
+                  </MovieRecord>
                 )
               })}
             </div>
@@ -162,6 +161,17 @@ function Movies() {
         }
         {!movies.length && !loading &&
           <span>No results found</span>
+        }
+        {!!movies?.length && !loading &&
+          <Link
+            to="/dashboard/moviesState"
+            search={{
+              movies,
+              // movies: btoa(JSON.stringify(movies)),
+            }}
+          >
+            <button type="button">goto movies state</button>
+          </Link>
         }
       </div>
       <div className="flex flex-grow-1" style={{ flexGrow: 1 }}>
