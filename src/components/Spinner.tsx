@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ClipLoader, MoonLoader } from 'react-spinners'
+import { ClipLoader } from 'react-spinners'
 
 export function Spinner() {
   return <ClipLoader
