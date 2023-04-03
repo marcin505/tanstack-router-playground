@@ -21,9 +21,8 @@ function Dashboard() {
         {(
           [
             ['.', 'Summary'],
-            ['/dashboard/movies', 'Movies', { limit: 3 }],
-            // ['/dashboard/moviesState', 'Movies State']
-            // ['/dashboard/users', 'Users'],
+            ['/dashboard/movies', 'Movies', { limit: 6 }],
+            ['/dashboard/moviesState', 'Movies State']
           ] as const
         ).map(([to, label, searchParams]) => {
           return (
@@ -31,6 +30,7 @@ function Dashboard() {
               key={to}
               to={to}
               search={searchParams}
+              // search={search => search}
               activeOptions={{ exact: to === '.' }}
               activeProps={{ className: `font-bold` }}
               className="p-2"
