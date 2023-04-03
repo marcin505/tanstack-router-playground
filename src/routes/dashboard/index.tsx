@@ -21,16 +21,16 @@ function Dashboard() {
         {(
           [
             ['.', 'Summary'],
-            ['/dashboard/movies', 'Movies', { limit: 6 }],
-            ['/dashboard/users', 'Users'],
+            ['/dashboard/movies', 'Movies', { limit: 3 }],
+            // ['/dashboard/moviesState', 'Movies State']
+            // ['/dashboard/users', 'Users'],
           ] as const
         ).map(([to, label, searchParams]) => {
           return (
             <route.Link
               key={to}
               to={to}
-              search={search => search}
-              // search={searchParams}
+              search={searchParams}
               activeOptions={{ exact: to === '.' }}
               activeProps={{ className: `font-bold` }}
               className="p-2"
