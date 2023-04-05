@@ -5,7 +5,7 @@ import { moviesRoute } from './movies';
 import { z } from 'zod';
 import { fetchMovie } from '../../../api';
 import { dashboardRoute } from '..';
-
+import { Button, MovieContainer } from './styles';
 const width = 55;
 
 export const movieRoute = moviesRoute.createRoute({
@@ -31,21 +31,23 @@ export const movieRoute = moviesRoute.createRoute({
 
 function MovieView() {
   const {
-    loaderData: { movie }
+    loaderData: { movie },
+    Link
   } = router.useMatch(movieRoute.id);
 
   return (
-    <div className="flex-1 flex-col" style={{ paddingTop: 62 }}>
-      <span className='text-lg' style={{ marginBottom: 30 }}>Movie Descrption</span>
+    <MovieContainer>
       <div className="flex">
         <span style={{ minWidth: width, fontWeight: 'bold' }}>title:</span>
         <span>{movie.titleText.text}</span>
       </div>
-      {movie?.releaseYear?.year && <div className="flex">
-        <span style={{ minWidth: width, fontWeight: 'bold' }}>year:</span>
-        <span>{movie.releaseYear.year}</span>
+      <div className="flex">
+        <span style={{ minWidth: width, fontWeight: 'bold' }}>type:</span>
+        <span>{movie?.titleType?.text}</span>
       </div>
-      }
-    </div >
+      <Link to='/dashboard/movieDetails' search={{ movie }}>
+        <Button type="button" style={{ marginTop: 20 }}>More Details</Button>
+      </Link>
+    </MovieContainer >
   )
 }

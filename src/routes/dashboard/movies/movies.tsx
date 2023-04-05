@@ -4,12 +4,12 @@ import { dashboardRoute } from '..'
 import { Spinner } from '../../../components/Spinner';
 import { countOptions } from '../../../utils';
 import { fetchMovies } from '../../../api';
-import { Outlet, SearchSchemaValidator, SearchSchemaValidatorObj } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 import _debounce from 'lodash/debounce';
 import { z } from 'zod'
 import { Movie } from '../../../types';
 import { PacmanLoader } from 'react-spinners';
-import { MovieRecord } from './styles';
+import { MovieRecord, Button } from './styles';
 
 const moviesSearchSchema = z.object({
   keyword: z.string().optional(),
@@ -119,11 +119,16 @@ function Movies() {
         }
         {!!movies?.length && !loading &&
           <>
-            <div className="flex" style={{ height: 30 }}>
-              <span className="w-24">#id</span>
+            <div className="flex" style={{ height: 30, fontWeight: 600 }}>
+              <span className="w-24">id</span>
               <span className="pl-3">keyword</span>
             </div>
-            <div className="divide-y" style={{ maxHeight: 'calc(100vh - 310px)', minHeight: 200, overflowY: 'auto' }}>
+            <div
+              className="divide-y"
+              style={
+                { maxHeight: 'calc(100vh - 310px)', minHeight: 200, overflowY: 'auto' }
+              }
+            >
               {(movies as Movie[]).map(movie => {
                 return (
                   <MovieRecord key={movie.id}>
@@ -170,7 +175,7 @@ function Movies() {
               // movies: btoa(JSON.stringify(movies)),
             }}
           >
-            <button type="button">goto movies state</button>
+            <Button type="button">Go to movies state</Button>
           </Link>
         }
       </div>
