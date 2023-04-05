@@ -44,16 +44,6 @@ function Root() {
 
   return (
     <div className={`flex flex-col`}>
-      <div className={`p-2`}>
-        <div
-          className={`text-3xl duration-300 delay-0 opacity-0 ${routerState.status === 'loading' || routerState.isFetching
-            ? ` duration-1000 opacity-40`
-            : ''
-            }`}
-        >
-          <Spinner />
-        </div>
-      </div>
       <div className={`flex flex-col`}>
         <div className="flex">
           {(

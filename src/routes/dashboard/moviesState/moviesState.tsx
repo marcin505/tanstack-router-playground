@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { parseSearchWith, stringifySearchWith } from '@tanstack/react-router'
 import { Router } from '@tanstack/react-router'
 import { Movie, MovieObject } from '../../../types';
+import { Heading, MovieStateContainer, MovieRecord } from './styles';
 
 const moviesStateSearchSchema = z.object({
   movies: z.array(MovieObject).optional(),
@@ -64,28 +65,29 @@ function MoviesState() {
   // console.log('movies parsed', JSON.parse(atob(`${movies}` || '')));
 
   return (
-    <div className="flex flex-col p-4">
+    <MovieStateContainer>
+      <Heading>Movies State</Heading>
       {movies?.length ?
         <>
-          <div className="flex" style={{ background: 'white', height: 30 }}>
+          <div className="flex" style={{ fontWeight: 600, height: 30 }}>
             <span className="w-24" style={{ minWidth: 100 }}>#id</span>
-            <span className="pl-3" style={{ width: 330 }}>keyword</span>
+            <span className="pl-3" style={{ width: 340 }}>keyword</span>
             <span className="pl-3">release year</span>
           </div>
-          <div className="divide-y" style={{ maxHeight: 'calc(100vh - 310px)', minHeight: 200, overflowY: 'auto' }}>
+          <div className="divide-y" style={{ maxHeight: 'calc(100vh - 500px)', minHeight: 200, overflowY: 'auto' }}>
             {(movies as Movie[]).map(movie => (
-              <div key={movie.id} className="flex py-2">
+              <MovieRecord key={movie.id}>
                 <span className="w-24" style={{ minWidth: 100 }}>#{movie.id}</span>
-                <span className="pl-3" style={{ width: 330, textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                <span className="pl-3" style={{ width: 340, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                   {movie.titleText.text}
                 </span>
-                <span className="w-24">{movie.releaseDate?.year}</span>
-              </div>
+                <span className="pl-3">{movie.releaseDate?.year}</span>
+              </MovieRecord>
             ))}
           </div>
         </>
         : <span>No movies in the search query</span>
       }
-    </div>
+    </MovieStateContainer>
   )
 }

@@ -22,7 +22,8 @@ function Dashboard() {
           [
             ['.', 'Summary'],
             ['/dashboard/movies', 'Movies', { limit: 6 }],
-            ['/dashboard/moviesState', 'Movies State']
+            // ['/dashboard/moviesState', 'Movies State']
+            ['/dashboard/movieDetails', 'Movie Details']
           ] as const
         ).map(([to, label, searchParams]) => {
           return (

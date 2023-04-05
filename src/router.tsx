@@ -7,6 +7,7 @@ import { dashboardIndexRoute } from './routes/dashboard/dashboard'
 import { moviesRoute } from './routes/dashboard/movies/movies'
 import { movieRoute } from './routes/dashboard/movies/movie'
 import { moviesStateRoute } from './routes/dashboard/moviesState/moviesState'
+import { movieDetailsRoute } from './routes/dashboard/movieDetails/movieDetails'
 
 const routeConfig = createRouteConfig().addChildren([
   indexRoute,
@@ -14,6 +15,7 @@ const routeConfig = createRouteConfig().addChildren([
     dashboardIndexRoute,
     moviesRoute.addChildren([movieRoute]),
     moviesStateRoute,
+    movieDetailsRoute,
   ]),
   expensiveRoute,
 ])
