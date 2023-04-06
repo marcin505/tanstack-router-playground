@@ -36,6 +36,9 @@ function MovieDetails() {
             <span style={{ minWidth: 55, fontWeight: 'bold' }}>type:</span>
             <span>{movie?.titleType?.text}</span>
           </div>
+          <div className="flex" style={{ marginTop: 15 }}>
+            {movie?.primaryImage?.url ? <img src={movie?.primaryImage?.url} width={200} /> : <span>No image</span>}
+          </div>
         </>
         : <span>No movie was selected </span>
       }

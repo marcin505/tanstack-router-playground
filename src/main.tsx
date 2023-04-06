@@ -20,19 +20,18 @@ function App() {
           router={router}>
           <Root />
           <TanStackRouterDevtools router={router} position="bottom-right" initialIsOpen={true} />
-          {/* <ReactQueryDevtools
+          <ReactQueryDevtools
             initialIsOpen
             position="bottom-left"
             toggleButtonProps={{
               style: {
-
                 transform: `scale(.7)`,
                 transformOrigin: 'top right',
                 position: 'absolute',
                 top: 0,
               },
             }}
-          /> */}
+          />
         </RouterProvider>
       </QueryClientProvider>
     </>
