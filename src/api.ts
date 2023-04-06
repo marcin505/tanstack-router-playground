@@ -32,11 +32,11 @@ export const fetchMovies = ({
 };
 
 export const fetchMovie = ({
-  id,
+  movieId,
 }: {
-  id: string;
+  movieId: string;
 }): Promise<{ results: Movie }> => {
-  return fetch(`${baseURL}/${id}`, options)
+  return fetch(`${baseURL}/${movieId}`, options)
     .then((response) => response.json())
     .catch((err) => {
       throw new Error(err);

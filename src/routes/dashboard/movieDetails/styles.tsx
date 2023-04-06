@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button as MoviesButton } from '../movies/styles'
+import { Button as MoviesButton } from '../movies/styles';
 
 export const MovieDetailsContainer = styled.div`
     flex: 1 1 0%;
@@ -13,4 +13,5 @@ export const MovieDetailsContainer = styled.div`
 export const Heading = styled.div`
   font-weight: 600;
   margin-bottom: 1.5rem;
+  font-size: 1rem;
 `;
