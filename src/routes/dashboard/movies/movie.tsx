@@ -13,7 +13,7 @@ export const movieRoute = moviesRoute.createRoute({
   path: ':movieId',
   element: <MovieView />,
   loader: async ({ params: { movieId } }) => {
-    const movie = await queryClient.ensureQueryData({ queryKey: ['movie', movieId], queryFn: () => fetchMovie({ movieId }).then(({ results }) => results), cacheTime: Infinity });
+    const movie = await queryClient.ensureQueryData({ queryKey: [movieId], queryFn: () => fetchMovie({ movieId }).then(({ results }) => results), cacheTime: Infinity });
 
     if (!movie) {
       throw new Error('movie not found')
@@ -38,7 +38,6 @@ function MovieView() {
 
   return (
     <MovieContainer>
-      kurde
       <div className="flex">
         <span style={{ minWidth: width, fontWeight: 'bold' }}>title:</span>
         <span>{movie?.titleText.text}</span>
