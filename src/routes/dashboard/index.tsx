@@ -2,14 +2,51 @@ import { createRouteConfig, Outlet } from '@tanstack/react-router'
 import * as React from 'react'
 
 import { router } from '../../router';
+import { getCurrenSearchCachedResult } from '../../utils';
 
 export const dashboardRoute = createRouteConfig().createRoute({
   path: 'dashboard',
   element: <Dashboard />,
 })
 
+interface MoviesSearchParams {
+  readonly keyword?: string;
+  readonly limit?: number;
+}
+
 function Dashboard() {
-  const route = router.useMatch(dashboardRoute.id)
+  const route = router.useMatch(dashboardRoute.id);
+  const { search } = route;
+
+  console.log(route, search);
+
+  const searchCachedResult = React.useMemo(() => {
+
+    const { keyword, limit } = {
+      keyword: (search as MoviesSearchParams)?.keyword,
+      limit: (search as MoviesSearchParams)?.limit
+    };
+    return getCurrenSearchCachedResult({ keyword, limit })
+  }, [search]);
+
+  const links: {
+    readonly path: string,
+    readonly label: string;
+    readonly searchParams?: Record<string, unknown>
+    readonly disabled?: boolean;
+  }[] = React.useMemo(() => ([
+    { path: '.', label: 'Summary' },
+    { path: '/dashboard/movies', label: 'Movies', searchParams: { limit: 6 } },
+    {
+      path: '/dashboard/moviesState',
+      label: 'Movies from URL',
+      searchParams: {
+        movies: searchCachedResult,
+        disabled: !searchCachedResult
+      },
+    },
+    { path: '/dashboard/movieDetails', label: 'Movie Details' }
+  ]), [])
 
   return (
     <>
@@ -18,21 +55,14 @@ function Dashboard() {
 
       </div>
       <div className="flex flex-wrap divide-x">
-        {(
-          [
-            ['.', 'Summary'],
-            ['/dashboard/movies', 'Movies', { limit: 6 }],
-            ['/dashboard/moviesState', 'Movies from url'],
-            ['/dashboard/movieDetails', 'Movie Details']
-          ] as const
-        ).map(([to, label, searchParams]) => {
+        {links.map(({ path, label, searchParams }) => {
+
           return (
             <route.Link
-              key={to}
-              to={to}
+              key={path}
+              to={path}
               search={searchParams}
-              // search={search => search}
-              activeOptions={{ exact: to === '.' }}
+              activeOptions={{ exact: path === '.' }}
               activeProps={{ className: `font-bold` }}
               className="p-2"
             >

@@ -2,6 +2,8 @@
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
-    "jsx": "react"
+    "jsx": "react",
+    "lib": ["ES5", "ES2015", "DOM", "ScriptHost"],
+    "sourceMap": true
   }
 }

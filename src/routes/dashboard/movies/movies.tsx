@@ -2,7 +2,7 @@ import * as React from 'react'
 import { router } from '../../../router'
 import { dashboardRoute } from '..'
 import { Spinner } from '../../../components/Spinner';
-import { countOptions } from '../../../utils';
+import { countOptions, getCurrenSearchCachedResult } from '../../../utils';
 import { fetchMovies } from '../../../api';
 import { Outlet } from '@tanstack/react-router';
 import _debounce from 'lodash/debounce';
@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { Movie } from '../../../types';
 import { PacmanLoader } from 'react-spinners';
 import { MovieRecord, Button } from './styles';
+import { queryClient } from '../../../main';
 
 const moviesSearchSchema = z.object({
   keyword: z.string().optional(),
@@ -40,6 +41,14 @@ function Movies() {
   }, []);
 
   React.useEffect(() => {
+    const currentSearchCached: Movie[] | undefined = getCurrenSearchCachedResult({ keyword, limit });
+    console.log(45, currentSearchCached);
+    if (currentSearchCached) {
+      setMovies(currentSearchCached);
+      setLoading(false);
+      return;
+    }
+
     const controller = new AbortController();
     const signal = controller.signal;
     debouncedSendRequest(signal)
@@ -55,9 +64,10 @@ function Movies() {
       }
       setLoading(true);
       fetchMovies({ keyword: keyword ?? '', limit: limit ?? 9, signal })
-        .then(({ results }) => {
-          setMovies(results)
-          console.log(results);
+        .then(({ results: movies }) => {
+          queryClient.setQueryData([keyword, limit], movies);
+          setMovies(movies);
+          console.log(movies);
           setLoading(false);
         })
     },
@@ -65,7 +75,7 @@ function Movies() {
   )
 
   const debouncedSendRequest = React.useMemo(() => {
-    return _debounce(sendRequest, 500);
+    return _debounce(sendRequest, 900);
   }, [sendRequest]);
 
   const updateSearchParam = React.useCallback((
