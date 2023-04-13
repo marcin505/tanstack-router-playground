@@ -63,9 +63,11 @@ function Movies() {
         return;
       }
       setLoading(true);
-      fetchMovies({ keyword: keyword ?? '', limit: limit ?? 9, signal })
+      fetchMovies({ keyword: `${keyword}` ?? '', limit: limit ?? 9, signal })
         .then(({ results: movies }) => {
-          queryClient.setQueryData([keyword, limit], movies);
+          if (movies.length) {
+            queryClient.setQueryData([`${keyword}`, limit], movies);
+          }
           setMovies(movies);
           console.log(movies);
           setLoading(false);
