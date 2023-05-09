@@ -16,8 +16,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider
-          router={router}>
+        <RouterProvider router={router}>
           <Root />
           <TanStackRouterDevtools router={router} position="bottom-right" initialIsOpen={true} />
           <ReactQueryDevtools

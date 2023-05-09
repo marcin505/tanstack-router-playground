@@ -12,9 +12,16 @@ const width = 55;
 export const movieRoute = moviesRoute.createRoute({
   path: ':movieId',
   element: <MovieView />,
-  loader: async ({ params: { movieId } }) => {
-    const movie = await queryClient.ensureQueryData({ queryKey: [movieId], queryFn: () => fetchMovie({ movieId }).then(({ results }) => results), cacheTime: Infinity });
+  errorElement: <span>ooops, it's the error component!</span>,
 
+  loader: async ({ params: { movieId } }) => {
+    // const movie = await queryClient.ensureQueryData(
+    //   {
+    //     queryKey: [movieId],
+    //     queryFn: () => fetchMovie({ movieId }).then(({ results }) => results), cacheTime: Infinity
+    //   }
+    // );
+    const movie = await fetchMovie({ movieId }).then(({ results }) => results);
     if (!movie) {
       throw new Error('movie not found')
     }

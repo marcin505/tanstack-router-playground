@@ -95,10 +95,14 @@ function Movies() {
     })
   }, [])
 
-  const onChange = React.useCallback((searchParam: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { value } = e.target;
-    updateSearchParam({ searchParam, value: searchParam === 'limit' ? parseInt(value) : value })
-  }, []);
+  const onChange = React.useCallback(
+    (searchParam: 'limit' | 'keyword') => (
+      { target: { value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+      updateSearchParam({
+        searchParam, value: searchParam === 'limit' ? parseInt(value) : value
+      })
+    }, []);
 
   return (
     <div className="flex-1 flex p-4">
@@ -151,7 +155,7 @@ function Movies() {
                           movieId: `${movie.id}`,
                         }}
                         search={{ keyword, limit }}
-                        preload="intent"
+                        // preload="intent"
                         className="flex text-blue-700"
                         activeProps={{ className: `font-bold` }}
                       >
@@ -184,7 +188,6 @@ function Movies() {
             to="/dashboard/moviesState"
             search={{
               movies,
-              // movies: btoa(JSON.stringify(movies)),
             }}
           >
             <Button type="button">Go to movies state</Button>
