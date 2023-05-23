@@ -1,5 +1,5 @@
-import { createRouteConfig, Outlet } from '@tanstack/react-router'
-import * as React from 'react'
+import { createRouteConfig, Outlet } from '@tanstack/react-router';
+import * as React from 'react';
 
 import { router } from '../../router';
 import { getCurrenSearchCachedResult } from '../../utils';
@@ -7,7 +7,7 @@ import { getCurrenSearchCachedResult } from '../../utils';
 export const dashboardRoute = createRouteConfig().createRoute({
   path: 'dashboard',
   element: <Dashboard />,
-})
+});
 
 interface MoviesSearchParams {
   readonly keyword?: string;
@@ -18,45 +18,45 @@ function Dashboard() {
   const route = router.useMatch(dashboardRoute.id);
   const { search } = route;
 
-  console.log(route, search);
+  // console.log(route, search);
 
   const searchCachedResult = React.useMemo(() => {
-
     const { keyword, limit } = {
       keyword: (search as MoviesSearchParams)?.keyword,
-      limit: (search as MoviesSearchParams)?.limit
+      limit: (search as MoviesSearchParams)?.limit,
     };
-    return getCurrenSearchCachedResult({ keyword, limit })
+    return getCurrenSearchCachedResult({ keyword, limit });
   }, [search]);
 
   const links: {
-    readonly path: string,
+    readonly path: string;
     readonly label: string;
-    readonly searchParams?: Record<string, unknown>
+    readonly searchParams?: Record<string, unknown>;
     readonly disabled?: boolean;
-  }[] = React.useMemo(() => ([
-    { path: '.', label: 'Summary' },
-    { path: '/dashboard/movies', label: 'Movies', searchParams: { limit: 6 } },
-    {
-      path: '/dashboard/moviesState',
-      label: 'Movies from URL',
-      searchParams: {
-        movies: searchCachedResult,
-        disabled: !searchCachedResult
+  }[] = React.useMemo(
+    () => [
+      { path: '.', label: 'Summary' },
+      { path: '/dashboard/movies', label: 'Movies', searchParams: { limit: 6 } },
+      {
+        path: '/dashboard/moviesState',
+        label: 'Movies from URL',
+        searchParams: {
+          movies: searchCachedResult,
+          disabled: !searchCachedResult,
+        },
       },
-    },
-    { path: '/dashboard/movieDetails', label: 'Movie Details' }
-  ]), [])
+      { path: '/dashboard/movieDetails', label: 'Movie Details' },
+    ],
+    []
+  );
 
   return (
     <>
       <div className="flex items-center border-b">
         <h2 className="text-xl p-2">Dashboard</h2>
-
       </div>
       <div className="flex flex-wrap divide-x">
         {links.map(({ path, label, searchParams }) => {
-
           return (
             <route.Link
               key={path}
@@ -68,11 +68,11 @@ function Dashboard() {
             >
               {label}
             </route.Link>
-          )
+          );
         })}
       </div>
       <hr />
       <Outlet />
     </>
-  )
+  );
 }

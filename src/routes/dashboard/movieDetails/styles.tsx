@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button as MoviesButton } from '../movies/styles';
 
 export const MovieDetailsContainer = styled.div`
-    flex: 1 1 0%;
-    font-size: 0.9rem;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
+  flex: 1 1 0%;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 `;
 
 export const Heading = styled.div`

@@ -1,6 +1,5 @@
-import * as React from 'react'
-import { Outlet, SearchSchemaValidator, SearchSchemaValidatorObj } from '@tanstack/react-router';
-import { router } from '../../../router'
+import * as React from 'react';
+import { router } from '../../../router';
 import { z } from 'zod';
 import { MovieObject } from '../../../types';
 import { dashboardRoute } from '..';
@@ -8,25 +7,25 @@ import { MovieDetailsContainer, Heading } from './styles';
 
 const movieDetaisSearchSchema = z.object({
   movie: MovieObject.optional(),
-})
+});
 
 export const movieDetailsRoute = dashboardRoute.createRoute({
   path: 'movieDetails',
   element: <MovieDetails />,
-  validateSearch: search => movieDetaisSearchSchema.parse(search)
-})
+  validateSearch: (search) => movieDetaisSearchSchema.parse(search),
+});
 
 function MovieDetails() {
   const {
-    search: { movie }
+    search: { movie },
   } = router.useMatch(movieDetailsRoute.id);
 
-  console.log(movie);
+  // console.log(movie);
 
   return (
     <MovieDetailsContainer>
       <Heading>Movie Details</Heading>
-      { movie ?
+      {movie ? (
         <>
           <div className="flex">
             <span style={{ minWidth: 55, fontWeight: 'bold' }}>title:</span>
@@ -40,8 +39,9 @@ function MovieDetails() {
             {movie?.primaryImage?.url ? <img src={movie?.primaryImage?.url} width={200} /> : <span>No image</span>}
           </div>
         </>
-        : <span>No movie was selected </span>
-      }
+      ) : (
+        <span>No movie was selected </span>
+      )}
     </MovieDetailsContainer>
-  )
+  );
 }

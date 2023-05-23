@@ -1,10 +1,10 @@
-Tanstack router playground. based on Kitchen Sink Example from TanStack https://tanstack.com/router/v1/docs/examples/react/kitchen-sink-multi-file
+##Tanstack router Demo
+based on Kitchen Sink Example from TanStack https://tanstack.com/router/v1/docs/examples/react/kitchen-sink-multi-file
 
-# Example
+##Getting started
 
-To run this example:
+Run:
 
 - `npm install` or `yarn`
 - `yarn start` or `yarn start`
   `
-  tanstack router playground. based on Kitchen Sink Example from TanStack https://tanstack.com/router/v1/docs/examples/react/kitchen-sink-multi-file?file=src%2Fmain.tsx
