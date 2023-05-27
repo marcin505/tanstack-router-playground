@@ -9,7 +9,7 @@ const options = {
   },
 };
 
-export const fetchMovies = ({
+export const fetchMovieList = ({
   keyword,
   limit,
   signal,
@@ -18,24 +18,17 @@ export const fetchMovies = ({
   limit: number;
   signal?: AbortSignal;
 }): Promise<{ results: Movie[] }> => {
-  return fetch(
-    `${baseURL}/search/keyword/${keyword.toLowerCase()}?limit=${limit}`,
-    {
-      ...options,
-      signal,
-    }
-  )
+  return fetch(`${baseURL}/search/keyword/${keyword.toLowerCase()}?limit=${limit}`, {
+    ...options,
+    signal,
+  })
     .then((response) => response.json())
     .catch((err) => {
       throw new Error(err);
     });
 };
 
-export const fetchMovie = ({
-  movieId,
-}: {
-  movieId: string;
-}): Promise<{ results: Movie }> => {
+export const fetchMovie = ({ movieId }: { movieId: string }): Promise<{ results: Movie }> => {
   return fetch(`${baseURL}/${movieId}`, options)
     .then((response) => response.json())
     .catch((err) => {

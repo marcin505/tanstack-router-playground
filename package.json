@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.26",

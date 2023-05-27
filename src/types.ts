@@ -25,7 +25,7 @@ export const MovieObject = z.object({
   releaseYear: z
     .object({
       year: z.number(),
-      endYear: z.null(),
+      endYear: z.number().nullable(),
       __typename: z.string(),
     })
     .nullable(),
