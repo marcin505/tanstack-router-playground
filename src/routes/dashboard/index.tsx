@@ -18,7 +18,7 @@ function Dashboard() {
   const route = router.useMatch(dashboardRoute.id);
   const { search } = route;
 
-  // console.log(route, search);
+  // console.log(route, search)
 
   const searchCachedResult = React.useMemo(() => {
     const { keyword, limit } = {
