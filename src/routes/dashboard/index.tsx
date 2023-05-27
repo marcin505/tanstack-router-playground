@@ -36,7 +36,7 @@ function Dashboard() {
       <div className="flex flex-wrap divide-x">
         {(
           [
-            { path: '.', label: 'Summary', searchParams: {} },
+            { path: '.', label: 'DB Home', searchParams: {} },
             { path: '/dashboard/movie-list', label: 'Movie List', searchParams: { limit: 6 } },
             {
               path: '/dashboard/movie-list-state',

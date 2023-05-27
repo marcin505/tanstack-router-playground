@@ -49,7 +49,11 @@ function Root() {
           ).map(([to, label]) => {
             return (
               <div key={to}>
-                <router.Link to={to} className={`block py-2 px-3 text-blue-700`} activeProps={{ className: `font-bold` }}>
+                <router.Link
+                  to={to}
+                  className={`block py-2 px-3 text-blue-700`}
+                  activeProps={{ className: `font-bold` }}
+                >
                   {label}
                 </router.Link>
               </div>

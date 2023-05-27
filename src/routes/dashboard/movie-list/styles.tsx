@@ -25,3 +25,21 @@ export const MovieContainer = styled.div`
   flex-direction: column;
   padding-top: 75px;
 `;
+
+export const QueriesContainer = styled.div`
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: 75px 0 0 0;
+
+  span {
+    min-width: 50px;
+  }
+
+  &:nth-child(3) {
+      color: rgb(29 78 216);
+    }
+  }
+`;
+
+export const QuerySpan = styled.span``;
