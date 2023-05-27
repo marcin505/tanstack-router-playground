@@ -28,35 +28,27 @@ function Dashboard() {
     return getCurrenSearchCachedResult({ keyword, limit });
   }, [search]);
 
-  const links: {
-    readonly path: string;
-    readonly label: string;
-    readonly searchParams?: Record<string, unknown>;
-    readonly disabled?: boolean;
-  }[] = React.useMemo(
-    () => [
-      { path: '.', label: 'Summary' },
-      { path: '/dashboard/movies', label: 'Movies', searchParams: { limit: 6 } },
-      {
-        path: '/dashboard/moviesState',
-        label: 'Movies from URL',
-        searchParams: {
-          movies: searchCachedResult,
-          disabled: !searchCachedResult,
-        },
-      },
-      { path: '/dashboard/movieDetails', label: 'Movie Details' },
-    ],
-    []
-  );
-
   return (
     <>
       <div className="flex items-center border-b">
         <h2 className="text-xl p-2">Dashboard</h2>
       </div>
       <div className="flex flex-wrap divide-x">
-        {links.map(({ path, label, searchParams }) => {
+        {(
+          [
+            { path: '.', label: 'Summary', searchParams: {} },
+            { path: '/dashboard/movies', label: 'Movies', searchParams: { limit: 6 } },
+            {
+              path: '/dashboard/moviesState',
+              label: 'Movies from URL',
+              searchParams: {
+                movies: searchCachedResult,
+                disabled: !searchCachedResult,
+              },
+            },
+            { path: '/dashboard/movieDetails', label: 'Movie Details', searchParams: {} },
+          ] as const
+        ).map(({ path, label, searchParams }) => {
           return (
             <route.Link
               key={path}
