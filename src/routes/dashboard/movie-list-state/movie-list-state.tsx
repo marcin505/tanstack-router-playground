@@ -5,26 +5,26 @@ import { z } from 'zod';
 import { Movie, MovieObject } from '../../../types';
 import { Heading, MovieStateContainer, MovieRecord } from './styles';
 
-const moviesStateSearchSchema = z.object({
-  movies: z.array(MovieObject).optional(),
+const movieListStateSearchSchema = z.object({
+  movieList: z.array(MovieObject).optional(),
 });
 
-export const moviesStateRoute = dashboardRoute.createRoute({
-  path: 'moviesState',
-  element: <MoviesState />,
-  validateSearch: (search) => moviesStateSearchSchema.parse(search),
+export const movieListStateRoute = dashboardRoute.createRoute({
+  path: 'movie-list-state',
+  element: <MovieListState />,
+  validateSearch: (search) => movieListStateSearchSchema.parse(search),
 });
 
-function MoviesState() {
+function MovieListState() {
   const {
-    search: { movies },
-  } = router.useMatch(moviesStateRoute.id);
-  // console.log(movies);
+    search: { movieList },
+  } = router.useMatch(movieListStateRoute.id);
+  // console.log(movieList);
 
   return (
     <MovieStateContainer>
-      <Heading>Movies State</Heading>
-      {movies?.length ? (
+      <Heading>MovieList State</Heading>
+      {movieList?.length ? (
         <>
           <div className="flex" style={{ fontWeight: 600, height: 30 }}>
             <span className="w-24" style={{ minWidth: 100 }}>
@@ -35,13 +35,24 @@ function MoviesState() {
             </span>
             <span className="pl-3">release year</span>
           </div>
-          <div className="divide-y" style={{ maxHeight: 'calc(100vh - 500px)', minHeight: 200, overflowY: 'auto' }}>
-            {(movies as Movie[]).map((movie) => (
+          <div
+            className="divide-y"
+            style={{ maxHeight: 'calc(100vh - 500px)', minHeight: 200, overflowY: 'auto' }}
+          >
+            {(movieList as Movie[]).map((movie) => (
               <MovieRecord key={movie.id}>
                 <span className="w-24" style={{ minWidth: 100 }}>
                   #{movie.id}
                 </span>
-                <span className="pl-3" style={{ width: 340, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                <span
+                  className="pl-3"
+                  style={{
+                    width: 340,
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
                   {movie.titleText.text}
                 </span>
                 <span className="pl-3">{movie.releaseDate?.year}</span>
@@ -50,7 +61,7 @@ function MoviesState() {
           </div>
         </>
       ) : (
-        <span>No movies in the search query</span>
+        <span>No movieList in the search query</span>
       )}
     </MovieStateContainer>
   );

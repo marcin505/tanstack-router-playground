@@ -10,7 +10,7 @@ const movieDetaisSearchSchema = z.object({
 });
 
 export const movieDetailsRoute = dashboardRoute.createRoute({
-  path: 'movieDetails',
+  path: 'movie-details',
   element: <MovieDetails />,
   validateSearch: (search) => movieDetaisSearchSchema.parse(search),
 });
@@ -36,7 +36,11 @@ function MovieDetails() {
             <span>{movie?.titleType?.text}</span>
           </div>
           <div className="flex" style={{ marginTop: 15 }}>
-            {movie?.primaryImage?.url ? <img src={movie?.primaryImage?.url} width={200} /> : <span>No image</span>}
+            {movie?.primaryImage?.url ? (
+              <img src={movie?.primaryImage?.url} width={200} />
+            ) : (
+              <span>No image</span>
+            )}
           </div>
         </>
       ) : (

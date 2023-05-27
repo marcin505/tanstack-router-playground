@@ -9,7 +9,7 @@ export const dashboardRoute = createRouteConfig().createRoute({
   element: <Dashboard />,
 });
 
-interface MoviesSearchParams {
+interface MovieListSearchParams {
   readonly keyword?: string;
   readonly limit?: number;
 }
@@ -22,8 +22,8 @@ function Dashboard() {
 
   const searchCachedResult = React.useMemo(() => {
     const { keyword, limit } = {
-      keyword: (search as MoviesSearchParams)?.keyword,
-      limit: (search as MoviesSearchParams)?.limit,
+      keyword: (search as MovieListSearchParams)?.keyword,
+      limit: (search as MovieListSearchParams)?.limit,
     };
     return getCurrenSearchCachedResult({ keyword, limit });
   }, [search]);
@@ -37,16 +37,16 @@ function Dashboard() {
         {(
           [
             { path: '.', label: 'Summary', searchParams: {} },
-            { path: '/dashboard/movies', label: 'Movies', searchParams: { limit: 6 } },
+            { path: '/dashboard/movie-list', label: 'Movie List', searchParams: { limit: 6 } },
             {
-              path: '/dashboard/moviesState',
-              label: 'Movies from URL',
+              path: '/dashboard/movie-list-state',
+              label: 'Movie List from URL',
               searchParams: {
-                movies: searchCachedResult,
+                movieList: searchCachedResult,
                 disabled: !searchCachedResult,
               },
             },
-            { path: '/dashboard/movieDetails', label: 'Movie Details', searchParams: {} },
+            { path: '/dashboard/movie-details', label: 'Movie Details', searchParams: {} },
           ] as const
         ).map(({ path, label, searchParams }) => {
           return (
