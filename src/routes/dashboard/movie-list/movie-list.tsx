@@ -9,7 +9,7 @@ import _debounce from 'lodash/debounce';
 import { z } from 'zod';
 import { Movie } from '../../../types';
 import { PacmanLoader } from 'react-spinners';
-import { MovieRecord, Button } from './styles';
+import { MovieRecord, Button, QueriesContainer, QuerySpan } from './styles';
 import { queryClient } from '../../../main';
 
 const movieListSearchSchema = z.object({
@@ -27,13 +27,43 @@ function MovieList() {
   const {
     Link,
     MatchRoute,
-    useRoute,
     navigate,
     search: { keyword, limit },
   } = router.useMatch(movieListRoute.id);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [movieList, setMovieList] = React.useState<Movie[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const [queriesList, setQueriesList] = React.useState<{ keyword: string; limit: number }[] | []>(
+    []
+  );
+
+  const sendRequest = React.useCallback(
+    (signal?: AbortSignal) => {
+      if (!keyword) {
+        setMovieList([]);
+        setLoading(false);
+        return;
+      }
+      fetchMovieList({ keyword: `${keyword}` ?? '', limit: limit ?? 6, signal })
+        .then(({ results: movieList }) => {
+          if (movieList.length) {
+            queryClient.setQueryData([`${keyword}`, limit], movieList);
+
+            if (keyword && limit) {
+              setQueriesList([...queriesList, { keyword, limit }]);
+            }
+          }
+
+          console.log(movieList);
+          setLoading(false);
+          setMovieList(movieList);
+        })
+        .catch((e) => {
+          console.warn('Error', e);
+        });
+    },
+    [keyword, limit, queriesList]
+  );
 
   React.useEffect(() => {
     if (inputRef?.current === null) return;
@@ -46,6 +76,7 @@ function MovieList() {
       limit,
     });
     // console.log(45, currentSearchCached);
+    setLoading(true);
     if (currentSearchCached) {
       setMovieList(currentSearchCached);
       setLoading(false);
@@ -58,76 +89,54 @@ function MovieList() {
     return () => controller.abort();
   }, [keyword, limit]);
 
-  const sendRequest = React.useCallback(
-    (signal?: AbortSignal) => {
-      if (!keyword) {
-        setMovieList([]);
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      fetchMovieList({ keyword: `${keyword}` ?? '', limit: limit ?? 9, signal }).then(
-        ({ results: movieList }) => {
-          if (movieList.length) {
-            queryClient.setQueryData([`${keyword}`, limit], movieList);
-          }
-          setMovieList(movieList);
-          console.log(movieList);
-          setLoading(false);
-        }
-      );
-    },
-    [keyword, limit]
-  );
-
   const debouncedSendRequest = React.useMemo(() => {
     return _debounce(sendRequest, 900);
   }, [sendRequest]);
 
-  const updateSearchParam = React.useCallback(
-    ({ searchParam, value }: { searchParam: string; value: string | number }) => {
+  const onInputChange =
+    (searchParam: 'limit' | 'keyword') =>
+    ({ target: { value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       navigate({
         search: (old) => {
           return {
             ...old,
-            [searchParam]: value,
+            [searchParam]: searchParam === 'limit' ? parseInt(value) : value,
           };
         },
       });
-    },
-    []
+    };
+
+  const isMoviesFetched = React.useMemo(
+    () => !!movieList?.length && !loading,
+    [loading, movieList?.length]
   );
 
-  const onChange = React.useCallback(
-    (searchParam: 'limit' | 'keyword') =>
-      ({ target: { value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        updateSearchParam({
-          searchParam,
-          value: searchParam === 'limit' ? parseInt(value) : value,
-        });
-      },
-    []
-  );
+  // React.useEffect(() => {
+  //   const cashedData = queryClient.getQueryCache().getAll()[0];
+  //   if (cashedData) {
+  //     console.log(cashedData);
+  //   }
+  // }, [queryClient.getQueryCache().getAll()[0]?.state]);
 
   return (
     <div className="flex-1 flex p-4">
-      <div className="flex flex-col pr-4" style={{ maxWidth: 500, width: 500, minWidth: 500 }}>
+      <div className="flex flex-col pr-4" style={{ width: 400, minWidth: 500 }}>
         <div className="flex mb-4">
           <div className="flex flex-col" style={{ flexGrow: 1 }}>
             <span style={{ fontSize: 12 }}>keyword</span>
             <input
               value={keyword ?? ''}
-              onChange={onChange('keyword')}
+              onChange={onInputChange('keyword')}
               placeholder="Search keyword..."
               className="border p-1 mr-2"
               ref={inputRef}
             />
           </div>
           <div className="flex flex-col">
-            <span style={{ fontSize: 12 }}>limit</span>
+            <span>limit</span>
             <select
               className="flex-1 border"
-              onChange={onChange('limit')}
+              onChange={onInputChange('limit')}
               value={limit}
               style={{ width: 50 }}
             >
@@ -138,16 +147,13 @@ function MovieList() {
           </div>
         </div>
         {loading && <PacmanLoader color="#159d96f3" size={40} speedMultiplier={2.1} />}
-        {!!movieList?.length && !loading && (
+        {isMoviesFetched && (
           <>
             <div className="flex" style={{ height: 30, fontWeight: 600 }}>
               <span className="w-24">id</span>
               <span className="pl-3">keyword</span>
             </div>
-            <div
-              className="divide-y"
-              style={{ maxHeight: 'calc(100vh - 310px)', minHeight: 200, overflowY: 'auto' }}
-            >
+            <div style={{ maxHeight: 'calc(100vh - 310px)', minHeight: 200, overflowY: 'auto' }}>
               {(movieList as Movie[]).map((movie) => {
                 return (
                   <MovieRecord key={movie.id}>
@@ -165,7 +171,7 @@ function MovieList() {
                         <span className="w-24">#{movie.id}</span>
                         <span
                           className="pl-3"
-                          style={{ width: 330, textOverflow: 'ellipsis', overflow: 'hidden' }}
+                          style={{ width: 280, textOverflow: 'ellipsis', overflow: 'hidden' }}
                         >
                           {movie.titleText.text}
                         </span>
@@ -187,7 +193,7 @@ function MovieList() {
           </>
         )}
         {!movieList.length && !loading && <span>No results found</span>}
-        {!!movieList?.length && !loading && (
+        {isMoviesFetched && (
           <Link
             to="/dashboard/movie-list-state"
             search={{
@@ -198,6 +204,26 @@ function MovieList() {
           </Link>
         )}
       </div>
+      {isMoviesFetched && (
+        <QueriesContainer>
+          <div className="flex" style={{ height: 30, fontWeight: 600 }}>
+            <span>limit</span>
+            <span>keyword</span>
+          </div>
+
+          {queriesList.map(({ limit, keyword }, index) => (
+            <Link
+              className="flex"
+              to="/dashboard/movie-list"
+              search={{ keyword, limit }}
+              key={index}
+            >
+              <span> {limit}</span>
+              <span>{keyword}</span>
+            </Link>
+          ))}
+        </QueriesContainer>
+      )}
       <div className="flex flex-grow-1" style={{ flexGrow: 1 }}>
         <Outlet />
       </div>
