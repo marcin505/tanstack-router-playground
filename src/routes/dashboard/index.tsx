@@ -32,34 +32,41 @@ function Dashboard() {
         <h2 className="text-xl p-2">Dashboard</h2>
       </div>
       <div className="flex flex-wrap divide-x">
-        {(
-          [
-            { path: '.', label: 'DB Home', searchParams: {} },
-            { path: '/dashboard/movie-list', label: 'Movie List', searchParams: { limit: 6 } },
-            {
-              path: '/dashboard/movie-list-state',
-              label: 'Movie List from URL',
-              searchParams: {
-                movieList: searchCachedResult,
-                disabled: !searchCachedResult,
-              },
-            },
-            { path: '/dashboard/movie-details', label: 'Movie Details', searchParams: {} },
-          ] as const
-        ).map(({ path, label, searchParams }) => {
-          return (
-            <route.Link
-              key={path}
-              to={path}
-              search={searchParams}
-              activeOptions={{ exact: path === '.' }}
-              activeProps={{ className: `font-bold` }}
-              className="p-2"
-            >
-              {label}
-            </route.Link>
-          );
-        })}
+        <route.Link
+          to={'.'}
+          search={{}}
+          activeOptions={{ exact: true }}
+          activeProps={{ className: `font-bold` }}
+          className="p-2"
+        >
+          DB Home
+        </route.Link>
+        <route.Link
+          to={'/dashboard/movie-list'}
+          search={{ limit: 6 }}
+          activeProps={{ className: `font-bold` }}
+          className="p-2"
+        >
+          Movie List
+        </route.Link>
+        <route.Link
+          to={'/dashboard/movie-list-state'}
+          search={{
+            movieList: searchCachedResult,
+          }}
+          activeProps={{ className: `font-bold` }}
+          className="p-2"
+        >
+          Movie List State from URL
+        </route.Link>
+        <route.Link
+          to={'/dashboard/movie-details'}
+          search={{}}
+          activeProps={{ className: `font-bold` }}
+          className="p-2"
+        >
+          Movie Details
+        </route.Link>
       </div>
       <hr />
       <Outlet />

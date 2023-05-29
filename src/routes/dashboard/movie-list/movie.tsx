@@ -11,6 +11,7 @@ export const movieRoute = movieListRoute.createRoute({
   errorElement: <span>ooops, it's the error component!</span>,
 
   loader: async ({ params: { movieId } }) => {
+    // await new Promise((r) => setTimeout(r, 1000));
     const movie = await fetchMovie({ movieId }).then(({ results }) => results);
     if (!movie) {
       throw new Error('movie not found');

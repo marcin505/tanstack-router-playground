@@ -31,6 +31,7 @@ function MovieList() {
     search: { keyword, limit },
   } = router.useMatch(movieListRoute.id);
   const inputRef = React.useRef<HTMLInputElement>(null);
+
   const [movieList, setMovieList] = React.useState<Movie[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [queriesList, setQueriesList] = React.useState<{ keyword: string; limit: number }[] | []>(
@@ -110,13 +111,6 @@ function MovieList() {
     () => !!movieList?.length && !loading,
     [loading, movieList?.length]
   );
-
-  // React.useEffect(() => {
-  //   const cashedData = queryClient.getQueryCache().getAll()[0];
-  //   if (cashedData) {
-  //     console.log(cashedData);
-  //   }
-  // }, [queryClient.getQueryCache().getAll()[0]?.state]);
 
   return (
     <div className="flex-1 flex p-4">
@@ -204,7 +198,7 @@ function MovieList() {
           </Link>
         )}
       </div>
-      {isMoviesFetched && (
+      {/* {isMoviesFetched && (
         <QueriesContainer>
           <div className="flex" style={{ height: 30, fontWeight: 600 }}>
             <span>limit</span>
@@ -223,7 +217,7 @@ function MovieList() {
             </Link>
           ))}
         </QueriesContainer>
-      )}
+      )} */}
       <div className="flex flex-grow-1" style={{ flexGrow: 1 }}>
         <Outlet />
       </div>
