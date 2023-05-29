@@ -42,16 +42,16 @@ function Root() {
         <div className="flex">
           <div className="flex">
             <router.Link
-              to={'.'}
+              to={'/'}
               className={`block py-2 px-3 text-blue-700`}
               activeProps={{ className: `font-bold` }}
             >
               Home
             </router.Link>
             <router.Link
-              to={'/dashboard'}
               className={`block py-2 px-3 text-blue-700`}
               activeProps={{ className: `font-bold` }}
+              to={'/dashboard'}
             >
               Dashboard
             </router.Link>
