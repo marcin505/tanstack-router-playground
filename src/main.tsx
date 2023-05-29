@@ -40,25 +40,29 @@ function Root() {
     <div className={`flex flex-col`}>
       <div className={`flex flex-col`}>
         <div className="flex">
-          {(
-            [
-              ['.', 'Home'],
-              ['/dashboard', 'Dashboard'],
-              ['/expensive', 'Expensive'],
-            ] as const
-          ).map(([to, label]) => {
-            return (
-              <div key={to}>
-                <router.Link
-                  to={to}
-                  className={`block py-2 px-3 text-blue-700`}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  {label}
-                </router.Link>
-              </div>
-            );
-          })}
+          <div className="flex">
+            <router.Link
+              to={'.'}
+              className={`block py-2 px-3 text-blue-700`}
+              activeProps={{ className: `font-bold` }}
+            >
+              Home
+            </router.Link>
+            <router.Link
+              to={'/dashboard'}
+              className={`block py-2 px-3 text-blue-700`}
+              activeProps={{ className: `font-bold` }}
+            >
+              Dashboard
+            </router.Link>
+            <router.Link
+              to={'/expensive'}
+              className={`block py-2 px-3 text-blue-700`}
+              activeProps={{ className: `font-bold` }}
+            >
+              Expensive
+            </router.Link>
+          </div>
         </div>
         <div className={`flex-1 border-l border-gray-200`}>
           {/* Render our first route match */}
