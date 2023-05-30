@@ -38,6 +38,11 @@ function MovieList() {
     []
   );
 
+  React.useEffect(() => {
+    if (inputRef?.current === null) return;
+    inputRef.current.focus();
+  }, []);
+
   const sendRequest = React.useCallback(
     (signal?: AbortSignal) => {
       if (!keyword) {
@@ -65,11 +70,6 @@ function MovieList() {
     },
     [keyword, limit, queriesList]
   );
-
-  React.useEffect(() => {
-    if (inputRef?.current === null) return;
-    inputRef.current.focus();
-  }, []);
 
   React.useEffect(() => {
     const currentSearchCached: Movie[] | undefined = getCurrenSearchCachedResult({
@@ -153,9 +153,9 @@ function MovieList() {
                   <MovieRecord key={movie.id}>
                     <pre className="text-sm flex">
                       <Link
-                        to="/dashboard/movie-list/:movieId"
+                        to="/dashboard/movie-list/:movieID"
                         params={{
-                          movieId: `${movie.id}`,
+                          movieID: `${movie.id}`,
                         }}
                         search={{ keyword, limit }}
                         // preload="intent"
@@ -170,9 +170,9 @@ function MovieList() {
                           {movie.titleText.text}
                         </span>
                         <MatchRoute
-                          to="/dashboard/movie-list/:movieId"
+                          to="/dashboard/movie-list/:movieID"
                           params={{
-                            movieId: movie.id,
+                            movieID: movie.id,
                           }}
                           pending
                         >
